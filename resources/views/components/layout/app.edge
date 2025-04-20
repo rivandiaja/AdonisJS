@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>{{ title }}</title>
+  </head>
+  <body
+  class="bg-gray-50 text-gray-800 dark:bg-neutral-900 dark:text-white min-h-screen flex flex-col bg-cover bg-center bg-no-repeat"
+  style="background-image: url('/resources/images/background-post.jpg');"
+>
+    <!-- Header -->
+    <header class="w-full bg-blue-900 shadow-md dark:bg-blue-950 transition duration-300">
+      <nav class="max-w-[85rem] w-full mx-auto px-6 py-4 flex flex-wrap items-center justify-between">
+        <a class="text-2xl font-bold text-white hover:opacity-90 transition" href="/">
+          🌟 StarEdge Digital
+        </a>
+
+        <div class="flex items-center gap-4">
+          @eval(await auth.check())
+
+          @if(auth.isAuthenticated)
+            <span class="font-medium text-white">
+              👋 {{ auth.user.name }}
+            </span>
+          
+            <form action="/logout?_method=DELETE" method="post">
+              {{ csrfField() }}
+              <button
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 transition"
+              >
+                Log out
+              </button>
+            </form>
+          @else
+            <a href="/login" class="text-sm font-medium text-white hover:text-blue-200 transition">
+              Log in
+            </a>
+            <a href="/register" class="text-sm font-medium text-blue-900 bg-white px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+              Register
+            </a>
+          @end
+          
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      @if(session.has('success'))
+  <div class="max-w-[85rem] mx-auto mt-4 px-4">
+    <div class="bg-green-100 text-green-800 text-sm px-4 py-3 rounded-lg shadow-md border border-green-200">
+      ✅ {{ session.get('success') }}
+    </div>
+  </div>
+@endif
+
+      {{{ await $slots.main() }}}
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 text-sm text-blue-900 dark:text-blue-200 bg-gray-100 dark:bg-blue-950">
+      © {{ new Date().getFullYear() }} StarEdge Digital. All rights reserved.
+    </footer>
+  </body>
+</html>

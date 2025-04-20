@@ -1,0 +1,43 @@
+@layout.app({ title: 'Post feed' })
+  <div
+    class="min-h-screen bg-cover bg-center bg-no-repeat flex items-start justify-center"
+    style="background-image: url('/resources/images/background-post.jpg');"
+  >
+    <div class="w-full max-w-2xl mx-auto px-6 py-10">
+      @flashMessage('notification')
+        <div class="mt-2 bg-teal-100/80 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 shadow-sm backdrop-blur-md transition duration-300 ease-in-out" role="alert">
+          {{ $message.message }}
+        </div>
+      @end
+
+      <form class="space-y-4 bg-white/20 border border-white/30 backdrop-blur-lg p-6 rounded-xl shadow-2xl transition duration-300 ease-in-out" action="/posts" method="post">
+        {{ csrfField() }}
+
+        <div>
+          <textarea
+            class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 ease-in-out resize-none bg-white/50 backdrop-blur-sm"
+            name="content"
+            required
+            rows="3"
+            placeholder="✨ Share an update with the world... ✨"
+          ></textarea>
+
+          @inputError('content')
+            <p class="text-xs text-red-600 mt-2">{{ $messages }}</p>
+          @end
+        </div>
+
+        <button
+          class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-gradient-to-r from-blue-700 to-indigo-700 text-white hover:from-blue-800 hover:to-indigo-800 transition duration-300 ease-in-out shadow-lg">
+          🚀 Post
+        </button>
+      </form>
+
+      <div class="mt-10 space-y-5">
+        @each(post in posts)
+          @include('pages/partials/post')
+        @end
+      </div>
+    </div>
+  </div>
+@end
